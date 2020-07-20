@@ -1,0 +1,31 @@
+name: CI
+
+env:
+  DENO_VERSION: 1.2.0
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  release:
+    types: [ published ]
+
+jobs:
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@master
+      - name: Install deno
+        uses: denolib/setup-deno@master
+        with: 
+          deno-version: ${{env.DENO_VERSION}}
+      - name: Check formatting
+        run: deno fmt --check
+      - name: Run tests
+        run: deno test
